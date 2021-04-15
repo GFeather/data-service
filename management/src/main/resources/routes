@@ -1,0 +1,4 @@
+GET     /                                   org.github.feather.management.rest.ApiServerController.list
+POST    /                                   org.github.feather.management.rest.ApiServerController.save
+DELETE  /                                   org.github.feather.management.rest.ApiServerController.del
+PUT     /                                   org.github.feather.management.rest.ApiServerController.update
