@@ -1,4 +1,4 @@
-package org.github.feather.sqlServer
+package org.github.feather.queryServer
 package query.builder
 
 import model.{Column, DataSource, DataType, LogicType, Operator, Param, ParamGroup, QueryDto}

@@ -1,4 +1,4 @@
-package org.github.feather.sqlServer
+package org.github.feather.queryServer
 package model
 
 object JDBCField {

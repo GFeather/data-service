@@ -62,7 +62,7 @@ lazy val query_server = (project in file("query-server"))
   .disablePlugins(PlayLayoutPlugin)
   .settings(
     commonSettings,
-    name := "sql-server",
+    name := "query-server",
     idePackagePrefix := Some("org.github.feather.queryServer"),
     libraryDependencies ++= Seq(
       "ch.qos.logback" % "logback-classic" % "1.2.3",

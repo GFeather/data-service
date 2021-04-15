@@ -1,4 +1,4 @@
-package org.github.feather.sqlServer
+package org.github.feather.queryServer
 package model
 
 case class QueryDto(dataSource: DataSource, param: List[Param], column: List[Column], group: List[ParamGroup])
