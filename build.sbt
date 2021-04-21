@@ -6,7 +6,9 @@ Global / lintUnusedKeysOnLoad := false
 
 logLevel := util.Level.Debug
 
-lazy val akkaVersion = "2.6.10"
+val AkkaVersion = "2.6.13"
+val AkkaHttpVersion = "10.2.3"
+
 
 enablePlugins(JavaAppPackaging)
 
@@ -15,11 +17,13 @@ lazy val commonSettings = Seq(
     version := "0.1.0",
     scalaVersion := "2.13.4",
     libraryDependencies ++= Seq(
-      "com.typesafe.play" %% "play-json" % "2.9.1",
       "com.chuusai" %% "shapeless" % "2.3.3",
       guice
     ),
 )
+
+lazy val root = (project in file("."))
+  .aggregate(common, management, gateway, query_server)
 
 lazy val management = project
   .dependsOn(common)
@@ -50,10 +54,11 @@ lazy val gateway = project
     name := "gateway",
     idePackagePrefix := Some("org.github.feather.gateway"),
     libraryDependencies ++= Seq(
-      "com.typesafe.akka" %% "akka-actor-typed" % akkaVersion,
+      "org.scalatest" %% "scalatest" % "3.1.0" % Test,
+      "com.typesafe.akka" %% "akka-actor-typed" % AkkaVersion,
       "ch.qos.logback" % "logback-classic" % "1.2.3",
-      "com.typesafe.akka" %% "akka-actor-testkit-typed" % akkaVersion % Test,
-      "org.scalatest" %% "scalatest" % "3.1.0" % Test
+      "com.typesafe.akka" %% "akka-actor-testkit-typed" % AkkaVersion % Test,
+
     )
 
   )
@@ -67,13 +72,17 @@ lazy val query_server = (project in file("query-server"))
     name := "query-server",
     idePackagePrefix := Some("org.github.feather.queryServer"),
     libraryDependencies ++= Seq(
+      "org.scalatest" %% "scalatest" % "3.1.0" % Test,
       "ch.qos.logback" % "logback-classic" % "1.2.3",
       "com.zaxxer" % "HikariCP" % "4.0.3",
       "mysql" % "mysql-connector-java" % "8.0.23",
       "io.circe" %% "circe-core" % "0.12.3",
       "io.circe" %% "circe-generic" % "0.12.3",
       "io.circe" %% "circe-parser" % "0.12.3",
-      "org.scalatest" %% "scalatest" % "3.1.0" % Test
+      // Akka Http
+      "com.typesafe.akka" %% "akka-http" % AkkaHttpVersion,
+      "com.typesafe.akka" %% "akka-http2-support" % AkkaHttpVersion,
+
     )
   )
 
