@@ -371,11 +371,11 @@ object Tables {
    *  @param required Database column required SqlType(bool), Default(None)
    *  @param createTime Database column create_time SqlType(timestamp), Default(None)
    *  @param updateTime Database column update_time SqlType(int4), Default(None) */
-  case class ParamConfigRow(id: Long, name: Option[String] = None, paramType: Option[Short] = None, dataType: Option[Short] = None, length: Option[Short] = None, required: Option[Boolean] = None, createTime: Option[Instant] = None, updateTime: Option[Int] = None)
+  case class ParamConfigRow(id: Long, name: Option[String] = None, paramType: Option[Short] = None, dataType: Option[Short] = None, length: Option[Short] = None, required: Option[Boolean] = None, createTime: Option[Instant] = None, updateTime: Option[Instant] = None)
   /** GetResult implicit for fetching ParamConfigRow objects using plain SQL queries */
   implicit def GetResultParamConfigRow(implicit e0: GR[Long], e1: GR[Option[String]], e2: GR[Option[Short]], e3: GR[Option[Boolean]], e4: GR[Option[Instant]], e5: GR[Option[Int]]): GR[ParamConfigRow] = GR{
     prs => import prs._
-    ParamConfigRow.tupled((<<[Long], <<?[String], <<?[Short], <<?[Short], <<?[Short], <<?[Boolean], <<?[Instant], <<?[Int]))
+    ParamConfigRow.tupled((<<[Long], <<?[String], <<?[Short], <<?[Short], <<?[Short], <<?[Boolean], <<?[Instant], <<?[Instant]))
   }
   /** Table description of table param_config. Objects of this class serve as prototypes for rows in queries. */
   class ParamConfig(_tableTag: Tag) extends profile.api.Table[ParamConfigRow](_tableTag, "param_config") {
@@ -398,7 +398,7 @@ object Tables {
     /** Database column create_time SqlType(timestamp), Default(None) */
     val createTime: Rep[Option[Instant]] = column[Option[Instant]]("create_time", O.Default(None))
     /** Database column update_time SqlType(int4), Default(None) */
-    val updateTime: Rep[Option[Int]] = column[Option[Int]]("update_time", O.Default(None))
+    val updateTime: Rep[Option[Instant]] = column[Option[Instant]]("update_time", O.Default(None))
   }
   /** Collection-like TableQuery object for table ParamConfig */
   lazy val ParamConfig = new TableQuery(tag => new ParamConfig(tag))
