@@ -1,19 +1,19 @@
 package org.github.feather.queryServer
 package query.executor
 
-import model._
+import model.DataType
 import query.builder.MysqlQueryBuilder
 
 import com.zaxxer.hikari.HikariDataSource
-import io.circe.generic.auto._
 import io.circe.syntax._
+import proto._
 
 import java.sql.{Connection, ResultSet, Statement}
 
 class MysqlQueryExecutor(queryDto: QueryDto) extends QueryExecutor {
 
-  private val dataSourceDto: DataSource = queryDto.dataSource
-  private val columns: List[Column] = queryDto.column
+  private val dataSourceDto: DataSource = queryDto.dataSource.get
+  private val columns: Seq[Column] = queryDto.column
 
   private val dataSource = new HikariDataSource();
   dataSource.setUsername(dataSourceDto.user)
@@ -37,7 +37,7 @@ class MysqlQueryExecutor(queryDto: QueryDto) extends QueryExecutor {
     val connection: Connection = dataSource.getConnection
     val stmt: Statement = connection.createStatement()
     val rs: ResultSet = stmt.executeQuery(MysqlQueryBuilder * queryDto)
-    var resList = List[Map[String, AnyVal]]()
+    var resList = List[Map[String, Any]]()
 
     while (rs.next()) {
 
@@ -48,9 +48,16 @@ class MysqlQueryExecutor(queryDto: QueryDto) extends QueryExecutor {
           .map(v => (v._1, matchType(rs, v._2)))
 
     }
+
     rs.close()
     connection.close()
-    Map("res" -> resList).asJson.noSpaces
+
+    import model.CustomEncoder.decodeAny
+    resList.asJson.noSpaces
+  }
+
+  def close() = {
+    dataSource.close()
   }
 
 
@@ -59,6 +66,7 @@ class MysqlQueryExecutor(queryDto: QueryDto) extends QueryExecutor {
     pre()
     val str: String = query()
     post()
+    close()
 
     str
   }
@@ -75,7 +83,7 @@ class MysqlQueryExecutor(queryDto: QueryDto) extends QueryExecutor {
 
   }
 
-  def matchType(rs: ResultSet, column: Column): AnyVal = {
+  def matchType(rs: ResultSet, column: Column): Any = {
     column.dataType match {
       case DataType.Boolean => rs.getBoolean(column.name)
       case DataType.Byte => rs.getByte(column.name)

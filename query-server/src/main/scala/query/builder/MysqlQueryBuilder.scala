@@ -1,24 +1,25 @@
 package org.github.feather.queryServer
 package query.builder
 
-import model.{Column, DataSource, DataType, LogicType, Operator, Param, ParamGroup, QueryDto}
+import model.{DataType, LogicType, Operator}
+import proto._
 
 object MysqlQueryBuilder {
 
   def * (bean: QueryDto): String = {
-    val columns: List[Column] = bean.column
-    val params: List[Param] = bean.param
-    val groups: List[ParamGroup] = bean.group
-    val source: DataSource = bean.dataSource
+    val columns: Seq[Column] = bean.column
+    val params: Seq[Param] = bean.param
+    val groups: Seq[ParamGroup] = bean.group
+    val source: DataSource = bean.dataSource.get
     val sql = s"select ${select(columns)} from ${source.tableName} where ${where(params, groups)}"
     sql
   }
 
-  def select(list: List[Column]): String = {
+  def select(list: Seq[Column]): String = {
     list.map("`" + _.name + "`").mkString(",")
   }
 
-  def where(params: List[Param], groups: List[ParamGroup]): String = {
+  def where(params: Seq[Param], groups: Seq[ParamGroup]): String = {
 
     val paramGroupMap: Map[Int, String] = composeParam(params)
 
@@ -29,7 +30,7 @@ object MysqlQueryBuilder {
 
   }
 
-  def composeParam(list: List[Param]): Map[Int, String] = {
+  def composeParam(list: Seq[Param]): Map[Int, String] = {
 
     list
       .groupBy(_.group)

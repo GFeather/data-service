@@ -8,6 +8,8 @@ logLevel := util.Level.Debug
 
 lazy val akkaVersion = "2.6.10"
 
+enablePlugins(JavaAppPackaging)
+
 lazy val commonSettings = Seq(
     organization := "org.github.feather",
     version := "0.1.0",
@@ -58,7 +60,7 @@ lazy val gateway = project
 
 lazy val query_server = (project in file("query-server"))
   .dependsOn(common)
-  .enablePlugins(PlayScala)
+  .enablePlugins(PlayScala, AkkaGrpcPlugin, JavaAppPackaging)
   .disablePlugins(PlayLayoutPlugin)
   .settings(
     commonSettings,
