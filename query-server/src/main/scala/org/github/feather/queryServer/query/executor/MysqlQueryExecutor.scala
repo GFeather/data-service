@@ -2,10 +2,9 @@ package org.github.feather.queryServer
 package query.executor
 
 import model.DataType
-import query.builder.MysqlQueryBuilder
-
 import com.zaxxer.hikari.HikariDataSource
 import io.circe.syntax._
+import org.github.feather.queryServer.query.builder.MysqlQueryBuilder
 import proto._
 
 import java.sql.{Connection, ResultSet, Statement}

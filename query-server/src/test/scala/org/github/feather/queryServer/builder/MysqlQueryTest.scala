@@ -1,9 +1,8 @@
-package org.github.feather.sqlServer
-package query.builder
+package org.github.feather.queryServer.builder
 
-import model._
+import proto._
 
-import com.alibaba.druid.pool.{DruidDataSource, DruidPooledConnection}
+import com.zaxxer.hikari.HikariDataSource
 import org.scalatest.funsuite.AnyFunSuite
 
 import java.sql.{Date, ResultSet, Statement, Time, Timestamp}
@@ -18,12 +17,14 @@ class MysqlQueryTest extends AnyFunSuite {
   }
 
   test("time test") {
-    val source = new DruidDataSource()
+
+    val source = new HikariDataSource();
     source.setUsername("root")
     source.setPassword("root")
-    source.setUrl("jdbc:mysql://localhost:3306/test?useSSL=false&serverTimezone=Asia/Shanghai")
+    source.setJdbcUrl("jdbc:mysql://localhost:3306/test?useSSL=false&serverTimezone=Asia/Shanghai")
 
-    val connection: DruidPooledConnection = source.getConnection
+
+    val connection = source.getConnection
     val stmt: Statement = connection.createStatement()
     val rs: ResultSet = stmt.executeQuery("select * from test")
     while (rs.next()) {

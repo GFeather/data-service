@@ -1,9 +1,7 @@
-package org.github.feather.sqlServer
-package query.builder
+package org.github.feather.queryServer.builder
 
-import model.{Column, DataSource, Param, ParamGroup, QueryDto}
-import query.builder.MysqlQueryBuilder.*
-
+import org.github.feather.queryServer.proto._
+import org.github.feather.queryServer.query.builder.MysqlQueryBuilder
 import org.scalatest.funsuite.AnyFunSuite
 
 class MysqlQueryBuilderTest extends AnyFunSuite {
@@ -31,7 +29,7 @@ class MysqlQueryBuilderTest extends AnyFunSuite {
         ParamGroup(3, 0),
         ParamGroup(2, 1))
 
-    val dataSource = DataSource(1, "localhost", 1, "test", "root", "root", "?t=1", "test")
+    val dataSource = Some(DataSource(1, "localhost", 1, "test", "root", "root", "?t=1", "test"))
 
     val bean: QueryDto = QueryDto(dataSource, params, columns, groups)
     println(MysqlQueryBuilder * bean)
