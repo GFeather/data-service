@@ -1,6 +1,6 @@
 package org.github.feather.queryServer.builder
 
-import proto._
+import org.github.feather.queryServer.proto._
 
 import com.zaxxer.hikari.HikariDataSource
 import org.scalatest.funsuite.AnyFunSuite

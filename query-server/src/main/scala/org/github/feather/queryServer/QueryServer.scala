@@ -15,16 +15,21 @@ import proto._
 import scala.concurrent.duration.DurationInt
 import scala.util.control.NonFatal
 
-object QueryServer extends App {
+object QueryServer {
   val logger = LoggerFactory.getLogger(getClass)
 
-  val system = ActorSystem(Behaviors.empty, "QueryServer")
-  try {
-    init(system)
-  } catch {
-    case NonFatal(e) =>
-      logger.error("Terminating due to initialization failure.", e)
-      system.terminate()
+
+  def main(args: Array[String]): Unit = {
+    println("println start")
+    val system = ActorSystem(Behaviors.empty, "QueryServer")
+    try {
+      logger.info("start")
+      init(system)
+    } catch {
+      case NonFatal(e) =>
+        logger.error("Terminating due to initialization failure.", e)
+        system.terminate()
+    }
   }
 
   def  init(system: ActorSystem[_]) = {

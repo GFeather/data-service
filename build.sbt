@@ -22,16 +22,13 @@ lazy val commonSettings = Seq(
     scalaVersion := "2.13.4",
     libraryDependencies ++= Seq(
       "org.scalatest" %% "scalatest" % "3.1.0" % Test,
-//      "ch.qos.logback" % "logback-classic" % "1.2.3",
-//      "org.slf4j" % "slf4j-api" % "1.7.25",
       // log
-//      "com.typesafe.akka" %% "akka-slf4j" % AkkaVersion,
+      "org.slf4j" % "slf4j-simple" % "1.7.30",
       "com.chuusai" %% "shapeless" % "2.3.3",
-      guice
     ),
 )
 
-lazy val management = project
+lazy val management = (project in file("management"))
   .dependsOn(common)
   .enablePlugins(PlayScala)
   .disablePlugins(PlayLayoutPlugin)
@@ -50,7 +47,7 @@ lazy val management = project
 
 )
 
-lazy val gateway = project
+lazy val gateway = (project in file("gateway"))
   .dependsOn(common)
   .enablePlugins(PlayScala)
   .disablePlugins(PlayLayoutPlugin)
@@ -67,7 +64,7 @@ lazy val gateway = project
 
 lazy val query_server = (project in file("query-server"))
   .dependsOn(common)
-  .enablePlugins(PlayScala, AkkaGrpcPlugin, JavaAppPackaging)
+  .enablePlugins(AkkaGrpcPlugin, JavaAppPackaging)
   .disablePlugins(PlayLayoutPlugin)
   .settings(
     commonSettings,
@@ -97,7 +94,7 @@ lazy val query_server = (project in file("query-server"))
     )
   )
 
-lazy val common = project
+lazy val common = (project in file("common"))
   .settings(
     commonSettings,
     name := "common",

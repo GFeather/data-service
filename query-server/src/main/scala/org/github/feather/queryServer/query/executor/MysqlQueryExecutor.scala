@@ -5,20 +5,24 @@ import model.DataType
 import com.zaxxer.hikari.HikariDataSource
 import io.circe.syntax._
 import org.github.feather.queryServer.query.builder.MysqlQueryBuilder
+import org.slf4j.LoggerFactory
 import proto._
 
 import java.sql.{Connection, ResultSet, Statement}
 
 class MysqlQueryExecutor(queryDto: QueryDto) extends QueryExecutor {
+  val logger = LoggerFactory.getLogger(getClass)
+
 
   private val dataSourceDto: DataSource = queryDto.dataSource.get
   private val columns: Seq[Column] = queryDto.column
 
+  logger.info("init data source")
   private val dataSource = new HikariDataSource();
   dataSource.setUsername(dataSourceDto.user)
   dataSource.setPassword(dataSourceDto.password)
   dataSource.setJdbcUrl(geneJdbcUrl(dataSourceDto))
-
+  logger.info("init data source successful")
 
   def init(): Unit = {
 
@@ -35,7 +39,12 @@ class MysqlQueryExecutor(queryDto: QueryDto) extends QueryExecutor {
   def query() = {
     val connection: Connection = dataSource.getConnection
     val stmt: Statement = connection.createStatement()
-    val rs: ResultSet = stmt.executeQuery(MysqlQueryBuilder * queryDto)
+    logger.info("query builder")
+    val sql = MysqlQueryBuilder * queryDto
+    logger.debug(s"builder sql : $sql")
+    logger.info(s"builder sql : $sql")
+    logger.info("execute Query")
+    val rs: ResultSet = stmt.executeQuery(sql)
     var resList = List[Map[String, Any]]()
 
     while (rs.next()) {
